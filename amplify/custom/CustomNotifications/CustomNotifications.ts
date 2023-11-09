@@ -1,8 +1,14 @@
 import { CfnOutput } from 'aws-cdk-lib';
-import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { EmailSubscription, LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Construct } from 'constructs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export class CustomNotifications extends Construct {
 
@@ -12,10 +18,10 @@ export class CustomNotifications extends Construct {
 
     const topic = new Topic(this, 'NotificationTopic');
 
-    const lambda = new Function(this, 'NotificationHandler', {
+    const lambda = new NodejsFunction(this, 'NotificationHandler', {
       runtime: Runtime.NODEJS_18_X,  
       handler: 'index.handler',
-      code: Code.fromAsset('custom/CustomNotifications/index.js'),
+      entry: join(__dirname, 'index.js'),
       functionName: 'notificationHandler',
     });
 
