@@ -1,20 +1,23 @@
 // publisher Lambda
-import { SNS } from "aws-sdk";
+import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
 
-const topic = new SNS();
+const client = new SNSClient({ region: process.env.AWS_REGION });
 
 export const handler = async (event: any) => {
   try {
     const { subject, body, recipient } = event;
 
-    const message = {
-      subject,
-      body,
-      recipient,
+    const params = {
+      TopicArn: process.env.topicArn,
+      Message: JSON.stringify({
+        subject,
+        body,
+        recipient,
+      }),
     };
 
-    // Publish message to SNS
-    await topic.publish(message).promise();
+    const command = new PublishCommand(params);
+    await client.send(command);
   } catch (err) {
     console.error(err);
     throw err;

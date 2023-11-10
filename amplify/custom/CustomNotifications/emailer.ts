@@ -1,30 +1,19 @@
 // emailer Lambda
-import { SNSEvent } from "@types/aws-lambda";
-import { SNSHandler } from "aws-lambda";
-import { SES, SNS } from "aws-sdk";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { DeleteMessageCommand, SNSClient } from "@aws-sdk/client-sns";
+import type { SNSEvent } from "aws-lambda";
 import { Message } from "./resource";
 
-const topic = new SNS();
-const ses = new SES();
+const sesClient = new SESClient({ region: process.env.AWS_REGION });
+const snsClient = new SNSClient({ region: process.env.AWS_REGION });
 
-export const handler: SNSHandler = async (event: SNSEvent) => {
-  try {
-    for (const record of event.Records) {
-      const message = JSON.parse(record.Sns.Message);
+export const handler = async (event: SNSEvent) => {
+  for (const record of event.Records) {
+    const message = JSON.parse(record.Sns.Message);
 
-      // Send email with SES
-      await sendEmail(message);
+    await sendEmail(message);
 
-      // Delete message from SNS
-      await topic
-        .deleteMessage({
-          TopicArn: record.Sns.TopicArn,
-          ReceiptHandle: record.Sns.ReceiptHandle,
-        })
-        .promise();
-    }
-  } catch (err) {
-    console.error(err);
+    await deleteMsg(record.Sns.ReceiptHandle, record.Sns.TopicArn);
   }
 };
 
@@ -45,10 +34,24 @@ const sendEmail = async (msg: Message) => {
   };
 
   try {
-    const result = await ses.sendEmail(params).promise();
+    const command = new SendEmailCommand(params);
+    const result = await sesClient.send(command);
     console.log(`Email sent to ${recipient}: ${result.MessageId}`);
   } catch (err) {
     console.error(`Error sending email to ${recipient}: ${err}`);
     throw err;
+  }
+};
+
+const deleteMsg = async (receiptHandle: string, topicArn: string) => {
+  const command = new DeleteMessageCommand({
+    ReceiptHandle: receiptHandle,
+    TopicArn: topicArn,
+  });
+
+  try {
+    await snsClient.send(command);
+  } catch (err) {
+    console.error("Error deleting message", err);
   }
 };

@@ -1,5 +1,6 @@
 import { APIGatewayProxyResultV2 } from "aws-lambda";
 
+// example data; example data can be fetched from a database
 const geoData = [
   {
     name: "United States",
@@ -8,24 +9,6 @@ const geoData = [
       "Alaska",
       "Arizona",
       //...
-    ],
-  },
-  {
-    name: "Canada",
-    states: [
-      "Alberta",
-      "British Columbia",
-      "Manitoba",
-      // ...
-    ],
-  },
-  {
-    name: "Mexico",
-    states: [
-      "Jalisco",
-      "Mexico City",
-      "Oaxaca",
-      // ...
     ],
   },
 ];
