@@ -18,9 +18,7 @@ new CustomNotifications(
   backend.getStack("CustomNotifications"),
   "CustomNotifications",
   {
-    emailSubscription: "email@example.com",
     sourceAddress: "sender@example.com",
-    recipientAddress: "recipient@example.com",
   }
 );
 
