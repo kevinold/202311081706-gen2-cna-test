@@ -2,7 +2,7 @@
 import { SNSEvent } from "@types/aws-lambda";
 import { SNSHandler } from "aws-lambda";
 import { SES, SNS } from "aws-sdk";
-import { Message } from "./CustomNotifications";
+import { Message } from "./resource";
 
 const topic = new SNS();
 const ses = new SES();
