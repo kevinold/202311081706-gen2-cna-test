@@ -33,7 +33,7 @@ export class CustomNotifications extends Construct {
     const nodeJsFunctionProps: NodejsFunctionProps = {
       bundling: {
         externalModules: [
-          "aws-sdk", // Use the 'aws-sdk' available in the Lambda runtime
+          "@aws-sdk", // Use the 'aws-sdk' available in the Lambda runtime
         ],
       },
       runtime: Runtime.NODEJS_18_X,
