@@ -6,7 +6,7 @@ const sns = new AWS.SNS();
 const ses = new AWS.SES();
 
 // Lambda handler
-exports.handler = async (event: SNSEvent) => {
+export const handler = async (event: SNSEvent) => {
   // Get message content
   const message = event.Records[0].Sns.Message;
 
