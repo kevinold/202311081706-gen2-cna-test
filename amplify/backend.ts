@@ -1,8 +1,8 @@
 import { defineBackend } from "@aws-amplify/backend";
 import { auth } from "./auth/resource.js";
 import { CustomNotifications } from "./custom/CustomNotifications/resource.js";
-import { LambdaInAVpcStack } from "./custom/LambdaInAVpcStack/index.js";
 import { data } from "./data/resource.js";
+import { LambdaInAVpcStack } from "./custom/LambdaInAVpcStack/resource.js";
 
 const backend = defineBackend({
   auth,
