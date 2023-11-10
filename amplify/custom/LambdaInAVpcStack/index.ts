@@ -61,7 +61,7 @@ export class LambdaInAVpcStack extends Stack {
 
     new CfnOutput(this, `${id}-getDataLambdaArn`, {
       value: getDataLambda.functionArn,
-      exportName: "getDataLambdaArn",
+      exportName: `${id}-getDataLambdaArn`,
     });
   }
 }
