@@ -1,15 +1,16 @@
 // publisher Lambda
 import { SNS } from "aws-sdk";
-import { Message } from "./CustomNotifications";
 
 const topic = new SNS();
 
 export const handler = async (event: any) => {
   try {
-    const message: Message = {
-      subject: "Hello",
-      body: "World",
-      recipient: "user@example.com",
+    const { subject, body, recipient } = event;
+
+    const message = {
+      subject,
+      body,
+      recipient,
     };
 
     // Publish message to SNS
