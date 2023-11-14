@@ -9,13 +9,14 @@ const backend = defineBackend({
   data,
 });
 
-// backend.resources.auth.resources.cfnResources.userPool.addPropertyOverride(
-//   "UserPoolTags",
-//   {
-//     Key: "userpool-tag-2",
-//     Value: "userpool-tag-value-2",
-//   }
-// );
+// add tags to the user pool
+backend.resources.auth.resources.cfnResources.cfnUserPool.addPropertyOverride(
+  "UserPoolTags",
+  {
+    "userpool-tag-1": "userpool-tag-value-1",
+    "userpool-tag-2": "userpool-tag-value-2",
+  }
+);
 
 // backend.resources.auth.resources.userPool.passwordPolicy.temporaryPasswordValidityDays = 3;
 
