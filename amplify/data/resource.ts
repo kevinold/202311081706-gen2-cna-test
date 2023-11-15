@@ -1,5 +1,5 @@
-import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
-
+import { Func, a, defineData, type ClientSchema } from "@aws-amplify/backend";
+import * as path from "path";
 // type Todo
 //   @model
 //   @auth(rules: [
@@ -25,14 +25,11 @@ import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
 // });
 
 const schema = a.schema({
-  Todo: a
-    .model({
-      name: a.string(),
-      description: a
-        .string()
-        .authorization([a.allow.public("iam").to(["read"])]),
-    })
-    .authorization([a.allow.public("iam").to(["read"]), a.allow.owner()]),
+  Todo: a.model({
+    name: a.string(),
+    description: a.string().authorization([a.allow.public("iam").to(["read"])]),
+  }),
+  //.authorization([a.allow.public("iam").to(["read"]), a.allow.owner()]),
 });
 
 // export const data = defineData({
@@ -52,4 +49,15 @@ const schema = a.schema({
 
 export type Schema = ClientSchema<typeof schema>;
 
-export const data = defineData({ schema });
+export const data = defineData({
+  schema,
+  authorizationModes: {
+    defaultAuthorizationMode: "API_KEY",
+    lambdaAuthorizationMode: {
+      function: Func.fromDir({
+        name: "authorizer",
+        codePath: path.join(".", "lambda-authorizer"),
+      }),
+    },
+  },
+});

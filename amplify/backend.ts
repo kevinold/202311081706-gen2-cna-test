@@ -21,7 +21,7 @@ backend.resources.auth.resources.cfnResources.cfnUserPool.addPropertyOverride(
 // backend.resources.auth.resources.userPool.passwordPolicy.temporaryPasswordValidityDays = 3;
 
 // create the bucket and its stack
-const bucketStack = backend.getStack("BucketStack");
+const bucketStack = backend.createStack("BucketStack");
 const bucket = new s3.Bucket(bucketStack, "Bucket", {
   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 });
@@ -32,7 +32,7 @@ const bucket = new s3.Bucket(bucketStack, "Bucket", {
 // 'Backup', { database: backend.resources.data.resources.database })
 
 new CustomNotifications(
-  backend.getStack("CustomNotifications"),
+  backend.createStack("CustomNotifications"),
   "CustomNotifications",
   {
     sourceAddress: "sender@example.com",
