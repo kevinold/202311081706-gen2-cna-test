@@ -1,5 +1,29 @@
 import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
 
+// type Todo
+//   @model
+//   @auth(rules: [
+//     { allow: owner, provider: oidc, identityClaim: "user_id" },
+//     { allow: private, provider: oidc },
+//     { allow: group, provider: oidc, groupClaim: "user_groups" },
+//   ]) {
+//   content: String
+// }
+
+// const schema = a.schema({
+//   Post: a
+//     .model({
+//       id: a.id(),
+//       owner: a.string(),
+//       postname: a.string(),
+//       content: a.string(),
+//     })
+//     .authorization([
+//       a.allow.owner().identityClaim("user_id"),
+//       a.allow.specificGroups(["Moderator"]).withClaimIn("user_groups"),
+//     ]),
+// });
+
 const schema = a.schema({
   Todo: a
     .model({
