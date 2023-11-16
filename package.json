@@ -28,7 +28,9 @@
     "typescript": "^5.2.2"
   },
   "overrides": {
-    "@aws-amplify/data-schema-types": "0.6.3"
+    "@aws-amplify/data-schema": "0.12.5",
+    "@aws-amplify/data-schema-types": "0.6.3",
+    "@aws-amplify/graphql-api-construct": "1.3.0"
   },
   "prettier": {}
 }
