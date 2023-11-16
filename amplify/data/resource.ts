@@ -1,5 +1,4 @@
-import { Func, a, defineData, type ClientSchema } from "@aws-amplify/backend";
-import * as path from "path";
+import { a, defineData, type ClientSchema } from "@aws-amplify/backend";
 // type Todo
 //   @model
 //   @auth(rules: [
@@ -25,14 +24,11 @@ import * as path from "path";
 // });
 
 const schema = a.schema({
-  Todo: a
-    .model({
-      name: a.string(),
-      description: a
-        .string()
-        .authorization([a.allow.public("iam").to(["read"])]),
-    })
-    .authorization([a.allow.custom()]),
+  Todo: a.model({
+    name: a.string(),
+    description: a.string().authorization([a.allow.public("iam").to(["read"])]),
+  }),
+  //.authorization([a.allow.custom()]),
   //.authorization([a.allow.public("iam").to(["read"]), a.allow.owner()]),
 });
 
@@ -55,13 +51,13 @@ export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
-  authorizationModes: {
-    defaultAuthorizationMode: "API_KEY",
-    lambdaAuthorizationMode: {
-      function: Func.fromDir({
-        name: "authorizer",
-        codePath: path.join(".", "lambda-authorizer"),
-      }),
-    },
-  },
+  // authorizationModes: {
+  //   defaultAuthorizationMode: "API_KEY",
+  //   lambdaAuthorizationMode: {
+  //     function: Func.fromDir({
+  //       name: "authorizer",
+  //       codePath: path.join(".", "lambda-authorizer"),
+  //     }),
+  //   },
+  // },
 });
