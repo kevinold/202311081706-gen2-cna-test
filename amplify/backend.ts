@@ -9,6 +9,35 @@ const backend = defineBackend({
   data,
 });
 
+const dataResources = backend.resources.data.resources;
+
+// Access L2 resources under `.resources`
+dataResources.tables["Todo"].tableArn;
+
+// // Access L1 resources under `.resources.cfnResources`
+dataResources.cfnResources.cfnGraphqlApi.xrayEnabled = true;
+Object.values(dataResources.cfnResources.cfnTables).forEach((table) => {
+  table.pointInTimeRecoverySpecification = {
+    pointInTimeRecoveryEnabled: false,
+  };
+});
+
+// Access L2 resources under `.resources`
+// api.resources.tables["Todo"].tableArn;
+
+// // Access L1 resources under `.resources.cfnResources`
+// api.resources.cfnResources.cfnGraphqlApi.xrayEnabled = true;
+// Object.values(api.resources.cfnResources.cfnTables).forEach(table => {
+//   table.pointInTimeRecoverySpecification = { pointInTimeRecoveryEnabled: false };
+// });
+
+backend.resources.data.resources.cfnResources.cfnTables[
+  "Todo"
+].timeToLiveSpecification = {
+  attributeName: "ttl",
+  enabled: true,
+};
+
 // add tags to the user pool
 backend.resources.auth.resources.cfnResources.cfnUserPool.addPropertyOverride(
   "UserPoolTags",
