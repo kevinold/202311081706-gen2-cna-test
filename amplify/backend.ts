@@ -18,7 +18,20 @@ backend.resources.auth.resources.cfnResources.cfnUserPool.addPropertyOverride(
   }
 );
 
-// backend.resources.auth.resources.userPool.passwordPolicy.temporaryPasswordValidityDays = 3;
+// override userpool password policies
+backend.resources.auth.resources.cfnResources.cfnUserPool.addPropertyOverride(
+  "Policies",
+  {
+    PasswordPolicy: {
+      MinimumLength: 10,
+      RequireLowercase: true,
+      RequireNumbers: true,
+      RequireSymbols: true,
+      RequireUppercase: true,
+      TemporaryPasswordValidityDays: 20,
+    },
+  }
+);
 
 // create the bucket and its stack
 const bucketStack = backend.createStack("BucketStack");
