@@ -11,6 +11,26 @@ const backend = defineBackend({
 
 const dataResources = backend.resources.data.resources;
 
+backend.resources.data.resources.cfnResources.cfnTables["Todo"].billingMode =
+  "PROVISIONED";
+backend.resources.data.resources.cfnResources.cfnTables[
+  "Todo"
+].provisionedThroughput = {
+  readCapacityUnits: 5,
+  writeCapacityUnits: 5,
+};
+
+// backend.resources.data.resources.cfnResources.cfnTables[
+//   "Todo"
+// ].globalSecondaryIndexes = {
+// [0].provisionedThroughput = {
+//   readCapacityUnits: 5,
+//   writeCapacityUnits: 5
+// };
+
+// backend.resources.data.resources.cfnResources.cfnTables["Todo"].billingMode =
+//   "PAY_PER_REQUEST";
+
 // Access L2 resources under `.resources`
 dataResources.tables["Todo"].tableArn;
 
