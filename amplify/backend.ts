@@ -11,6 +11,12 @@ const backend = defineBackend({
 
 const dataResources = backend.resources.data.resources;
 
+backend.resources.data.resources.cfnResources.cfnTables[
+  "Todo"
+].pointInTimeRecoverySpecification = {
+  pointInTimeRecoveryEnabled: true,
+};
+
 backend.resources.data.resources.cfnResources.cfnTables["Todo"].billingMode =
   "PROVISIONED";
 backend.resources.data.resources.cfnResources.cfnTables[
