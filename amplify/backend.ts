@@ -26,10 +26,7 @@ backend.resources.data.resources.cfnResources.cfnTables[
   writeCapacityUnits: 5,
 };
 
-// backend.resources.data.resources.cfnResources.cfnTables[
-//   "Todo"
-// ].globalSecondaryIndexes = {
-// [0].provisionedThroughput = {
+// backend.resources.data.resources.cfnResources.cfnTables["Todo"].globalSecondaryIndexes[0].provisionedThroughput = {
 //   readCapacityUnits: 5,
 //   writeCapacityUnits: 5
 // };
