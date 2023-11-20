@@ -2,7 +2,7 @@
 // amplify/custom/CustomNotifications/emailer.ts
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import type { SNSHandler } from "aws-lambda";
-import type { Message } from "./resource";
+import type { Message } from "./resource.ts";
 
 const sesClient = new SESClient({ region: process.env.AWS_REGION });
 
