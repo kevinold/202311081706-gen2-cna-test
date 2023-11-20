@@ -1,27 +1,26 @@
 // emailer Lambda
+// amplify/custom/CustomNotifications/emailer.ts
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { DeleteMessageCommand, SNSClient } from "@aws-sdk/client-sns";
-import type { SNSEvent } from "aws-lambda";
-import { Message } from "./resource";
+import type { SNSHandler } from "aws-lambda";
+import type { Message } from "./resource";
 
 const sesClient = new SESClient({ region: process.env.AWS_REGION });
-const snsClient = new SNSClient({ region: process.env.AWS_REGION });
 
-export const handler = async (event: SNSEvent) => {
+// define the handler to process messages from the SNS topic and send via SES
+export const handler: SNSHandler = async (event: any) => {
   for (const record of event.Records) {
-    const message = JSON.parse(record.Sns.Message);
+    const message: Message = JSON.parse(record.Sns.Message);
 
+    // send the message via email
     await sendEmail(message);
-
-    await deleteMsg(record.Sns.ReceiptHandle, record.Sns.TopicArn);
   }
 };
 
-const sendEmail = async (msg: Message) => {
-  const { recipient, subject, body } = msg;
+const sendEmail = async (message: Message) => {
+  const { recipient, subject, body } = message;
 
-  const params = {
-    Source: process.env.sourceAddress,
+  const command = new SendEmailCommand({
+    Source: process.env.SOURCE_ADDRESS,
     Destination: {
       ToAddresses: [recipient],
     },
@@ -31,27 +30,13 @@ const sendEmail = async (msg: Message) => {
       },
       Subject: { Data: subject },
     },
-  };
-
-  try {
-    const command = new SendEmailCommand(params);
-    const result = await sesClient.send(command);
-    console.log(`Email sent to ${recipient}: ${result.MessageId}`);
-  } catch (err) {
-    console.error(`Error sending email to ${recipient}: ${err}`);
-    throw err;
-  }
-};
-
-const deleteMsg = async (receiptHandle: string, topicArn: string) => {
-  const command = new DeleteMessageCommand({
-    ReceiptHandle: receiptHandle,
-    TopicArn: topicArn,
   });
 
   try {
-    await snsClient.send(command);
-  } catch (err) {
-    console.error("Error deleting message", err);
+    const result = await sesClient.send(command);
+    console.log(`Email sent to ${recipient}: ${result.MessageId}`);
+  } catch (error) {
+    console.error(`Error sending email to ${recipient}: ${error}`);
+    throw new Error(`Failed to send email to ${recipient}`, { cause: error });
   }
 };
